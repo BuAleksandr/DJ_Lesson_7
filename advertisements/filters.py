@@ -8,7 +8,7 @@ class AdvertisementFilter(filters.FilterSet):
 
     # TODO: задайте требуемые фильтры
     created_at = filters.DateTimeFromToRangeFilter()
-    status = filters.BooleanFilter()
+    status = filters.CharFilter()
 
     class Meta:
         model = Advertisement

@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.viewsets import ModelViewSet
 
@@ -16,13 +16,10 @@ class AdvertisementViewSet(ModelViewSet):
     #   сериализаторов и фильтров
     queryset = Advertisement.objects.all()
     serializer_class = AdvertisementSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated | IsAdminUser, IsOwnerOrReadOnly]
     throttle_classes = [UserRateThrottle, AnonRateThrottle]
     filter_backends = [DjangoFilterBackend]
     filterset_class = AdvertisementFilter
-
-    def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
 
     def get_permissions(self):
         """Получение прав для действий."""
